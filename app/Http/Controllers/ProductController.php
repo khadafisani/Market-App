@@ -2,25 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Http\Requests\ProductController\UpdateRequest;
+use App\Http\Requests\ProductController\StoreRequest;
 
 class ProductController extends Controller
 {
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $valid = Validator::make($request->all(), [
-            'name'      => 'required|string',
-            'stock'     => 'required|integer',
-            'price'      => 'required|integer',
-        ]);
-
-        if($valid->fails())
-        {
-            return response()->json($valid->errors(), 422); //422 error response
-        }
+        $valid = $request->validated();
 
         $data = [
             'name'  => $request->name,
@@ -30,14 +20,24 @@ class ProductController extends Controller
 
         Product::create($data);
 
-        return response()->json(['message' => 'Product Successfully Saved']);
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'Product Successfully Saved',
+            'code' => 201,
+            'data' => [],
+        ]);
     }
 
 
-    public function getData(Request $request)
+    public function product()
     {
         $product = Product::all();
-        return response()->json(['data' => $product], 200);
+        return response()->json([
+            'status' => 'ok',
+            'message' => null,
+            'code' => 200,
+            'data' => $product,
+        ]);
     }
 
     public function destroy($id)
@@ -47,26 +47,29 @@ class ProductController extends Controller
         if($product)
         {
             $product->delete();
-            return response()->json(['message' => 'Product has been removed'], 200);
+            $data = [
+                'status' => 'ok',
+                'message' => 'Product has been removed',
+                'code' => 200,
+                'data' => [],
+            ];
         }
         else
         {
-            return response()->json(['message' => 'Product not found'], 400);
+           $data = [
+                'status' => 'ok',
+                'message' => 'Product not found',
+                'code' => 401,
+                'data' => [],
+           ];
         }
+
+        return response()->json($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        $valid = Validator::make($request->all(), [
-            'name'      => 'required|string',
-            'stock'     => 'required|integer',
-            'price'     => 'required|integer',
-        ]);
-
-        if($valid->fails())
-        {
-            return response()->json($valid->errors(), 422); //422 error response
-        }
+        $valid = $request->validated();
 
         $product = Product::find($id);
         if($product)
@@ -77,11 +80,23 @@ class ProductController extends Controller
 
             $product->save();
 
-            return response()->json(['message' => 'Product successfully Update'], 200);
+            $data = [
+                'status' => 'ok',
+                'message' => 'Product successfully Update',
+                'code' => 200,
+                'data' => [],
+            ];
         }
         else
         {
-            return response()->json(['message' => 'Product not found'], 400);
+            $data = [
+                'status' => 'ok',
+                'message' => 'Product not found',
+                'code' => 401,
+                'data' => [],
+           ];
         }
+
+        return response()->json($data);
     }
 }

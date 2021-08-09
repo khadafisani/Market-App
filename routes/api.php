@@ -24,17 +24,19 @@ Route::group(['prefix' => 'v1'], function() {
 
     Route::group(['middleware' => 'auth:api'], function(){
 
-        //Admin only!
-        Route::group(['middleware' => 'admin'],function()
+        Route::get('logout', [Auth\AuthController::class, 'logout']);
+
+        //Admin only!;
+        Route::group(['middleware' => 'user:admin'],function()
         {
-            Route::post('adduser', [AuthController::class, 'addUser']);
-            Route::get('users', [AuthController::class, 'users']);
-            Route::post('user/update/{id}', [AuthController::class, 'updateUser']);
-            Route::get('user/delete/{id}', [AuthController::class, 'deleteUser']);
+            Route::post('adduser', [Auth\AuthController::class, 'addUser']);
+            Route::get('users', [Auth\AuthController::class, 'users']);
+            Route::post('user/update/{id}', [Auth\AuthController::class, 'updateUser']);
+            Route::get('user/delete/{id}', [Auth\AuthController::class, 'deleteUser']);
         });
 
         Route::post('product', [ProductController::class, 'store']);
-        Route::get('product', [ProductController::class, 'getData']);
+        Route::get('products', [ProductController::class, 'product']);
         Route::get('product/{id}', [ProductController::class, 'destroy']);
         Route::post('product/{id}', [ProductController::class, 'update']);
     });

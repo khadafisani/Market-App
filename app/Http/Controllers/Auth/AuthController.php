@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\AddUserRequest;
+use App\Http\Requests\AuthController\LoginRequest;
+use App\Http\Requests\AuthController\AddUserRequest;
 
 use App\Http\Controllers;
 
@@ -24,9 +22,9 @@ class AuthController extends Controller
         if(!Auth::attempt($data)){
             return response()->json([
                 'status' => 'failed',
-                'code' => 400,
+                'code' => 401,
                 'message' => 'Username Or password incorrect',
-                'data' => null
+                'data' => [],
             ]);
         }
 
@@ -49,7 +47,7 @@ class AuthController extends Controller
 
     public function addUser(AddUserRequest $request)
     {
-        $valid = $request->validate();
+        $valid = $request->validated();
 
         $user = new User; //new user object
 
@@ -66,11 +64,11 @@ class AuthController extends Controller
             'status' => 'oke',
             'code' => 201,
             'message' => 'Successfuly created user!',
-            'data' => null,
+            'data' => [],
         ]);
     }
 
-    public function users(Request $request)
+    public function users()
     {
        return response()->json([
            'status' => 'ok',
@@ -79,7 +77,7 @@ class AuthController extends Controller
            'data' => User::all()]);
     }
 
-    public function updateUser(Request $request, $id)
+    public function updateUser($id)
     {
         $user = User::find($id);
 
@@ -93,19 +91,29 @@ class AuthController extends Controller
                 'status' => 'ok',
                 'code' => 200,
                 'message' => 'user successfully update',
-                'data' => null
+                'data' => [],
             ];
         }
         else
         {
             $data = [
                 'status' => 'failed',
-                'code' => 400,
+                'code' => 401,
                 'message' => 'user not found',
-                'data' => null
+                'data' => [],
             ];
         }
 
         return response()->json($data);
+    }
+
+    public function logout(){
+        Auth::user()->token()->revoke();
+        return response()->json([
+            'status' => 'ok',
+            'code' => 200,
+            'message' => 'successfully logged out',
+            'data'  => [],
+        ]);
     }
 }
