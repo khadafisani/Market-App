@@ -19,7 +19,7 @@ class AdminOnly
     {
         if(Auth::user()->role != 'admin')
         {
-            return response()->json(['message' => 'Unathorize!'], 400);
+            return response()->json(['message' => 'Unathorize!'], 401);
         }
         return $next($request);
     }

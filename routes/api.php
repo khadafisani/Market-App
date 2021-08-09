@@ -27,9 +27,10 @@ Route::group(['prefix' => 'v1'], function() {
         //Admin only!
         Route::group(['middleware' => 'admin'],function()
         {
-            Route::post('adduser', [Auth\AuthController::class, 'addUser']);
-            Route::get('users', [Auth\AuthController::class, 'users']);
-
+            Route::post('adduser', [AuthController::class, 'addUser']);
+            Route::get('users', [AuthController::class, 'users']);
+            Route::post('user/update/{id}', [AuthController::class, 'updateUser']);
+            Route::get('user/delete/{id}', [AuthController::class, 'deleteUser']);
         });
 
         Route::post('product', [ProductController::class, 'store']);

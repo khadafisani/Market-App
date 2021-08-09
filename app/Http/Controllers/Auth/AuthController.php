@@ -8,25 +8,26 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\AddUserRequest;
+
 use App\Http\Controllers;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $data = $request->only(['email', 'password']);
-        $valid = Validator::make($data, [
-            'email'     => 'required|email',
-            'password'  => 'required|string',
-        ]);
+        $valid = $request->validated();
 
-        if($valid->fails())
-        {
-            return response()->json($valid->errors(), 422); //422 is any error response
-        }
+        $data = $request->only(['email', 'password']);
 
         if(!Auth::attempt($data)){
-            return response()->json(['message' => 'Username Or password incorrect'], 403);
+            return response()->json([
+                'status' => 'failed',
+                'code' => 400,
+                'message' => 'Username Or password incorrect',
+                'data' => null
+            ]);
         }
 
         $user = $request->user();
@@ -36,24 +37,19 @@ class AuthController extends Controller
         $token->save();
 
         return response()->json([
-            'token_bearer'  => 'Bearer '.$tokenResult->accessToken,
-            'expires_at'    => Carbon::parse($token->expires_at)->toDateTimeString()
+            'status' => 'ok',
+            'code' => 200,
+            'message' => '',
+            'data' => [
+            'token_bearer' => 'Bearer '.$tokenResult->accessToken,
+            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
+            ],
         ]);
     }
 
-    public function addUser(Request $request)
+    public function addUser(AddUserRequest $request)
     {
-        $valid = Validator::make($request->all(), [
-            'name'      => 'required',
-            'email'     => 'required|email',
-            'password'  => 'required|string',
-            'role'      => 'required|string',
-        ]);
-
-        if($valid->fails())
-        {
-            return response()->json($valid->errors(), 422); //422 error response
-        }
+        $valid = $request->validate();
 
         $user = new User; //new user object
 
@@ -66,11 +62,50 @@ class AuthController extends Controller
         //insert to database
         $user->save();
 
-        return response()->json(['message' => 'Successfuly created user!'], 201);
+        return response()->json([
+            'status' => 'oke',
+            'code' => 201,
+            'message' => 'Successfuly created user!',
+            'data' => null,
+        ]);
     }
 
     public function users(Request $request)
     {
-       return response()->json(['data' => User::all(), 201]);
+       return response()->json([
+           'status' => 'ok',
+           'message' => '',
+           'code' => 200,
+           'data' => User::all()]);
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if($user)
+        {
+            $user->password = $request->password;
+            $user->role = $request->role;
+            $user->save();
+
+            $data = [
+                'status' => 'ok',
+                'code' => 200,
+                'message' => 'user successfully update',
+                'data' => null
+            ];
+        }
+        else
+        {
+            $data = [
+                'status' => 'failed',
+                'code' => 400,
+                'message' => 'user not found',
+                'data' => null
+            ];
+        }
+
+        return response()->json($data);
     }
 }
