@@ -41,7 +41,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
+    public function addUser(Request $request)
     {
         $valid = Validator::make($request->all(), [
             'name'      => 'required',
@@ -69,8 +69,8 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfuly created user!'], 201);
     }
 
-    public function user(Request $request)
+    public function users(Request $request)
     {
-       return response()->json(['data' => $request->user(), 201]);
+       return response()->json(['data' => User::all(), 201]);
     }
 }

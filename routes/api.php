@@ -20,11 +20,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function() {
     Route::post('login', [Auth\AuthController::class, 'login']);
-    Route::post('register', [Auth\AuthController::class, 'register']);
+
 
     Route::group(['middleware' => 'auth:api'], function(){
 
-        Route::get('user', [Auth\AuthController::class, 'user']);
+        //Admin only!
+        Route::group(['middleware' => 'admin'],function()
+        {
+            Route::post('adduser', [Auth\AuthController::class, 'addUser']);
+            Route::get('users', [Auth\AuthController::class, 'users']);
+
+        });
 
         Route::post('product', [ProductController::class, 'store']);
         Route::get('product', [ProductController::class, 'getData']);
