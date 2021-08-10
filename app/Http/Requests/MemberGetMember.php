@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\ProductController;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class updateRequest extends FormRequest
+class MemberGetMember extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class updateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => 'required|string',
-            'stock'     => 'required|integer',
-            'price'     => 'required|integer',
+            'id' => 'required|exists:members'
         ];
     }
 }

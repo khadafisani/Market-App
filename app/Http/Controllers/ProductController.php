@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Http\Requests\ProductController\UpdateRequest;
-use App\Http\Requests\ProductController\StoreRequest;
+use App\Http\Requests\ProductUpdate;
+use App\Http\Requests\ProductStore;
 
 class ProductController extends Controller
 {
-    public function store(StoreRequest $request)
+    public function store(ProductStore $request)
     {
         $valid = $request->validated();
 
@@ -57,7 +57,7 @@ class ProductController extends Controller
         else
         {
            $data = [
-                'status' => 'ok',
+                'status' => 'failed',
                 'message' => 'Product not found',
                 'code' => 401,
                 'data' => [],
@@ -67,7 +67,7 @@ class ProductController extends Controller
         return response()->json($data);
     }
 
-    public function update(UpdateRequest $request, $id)
+    public function update(ProductUpdate $request, $id)
     {
         $valid = $request->validated();
 
@@ -98,5 +98,29 @@ class ProductController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function specific($id)
+    {
+        $product = Product::find($id);
+
+        if($product)
+        {
+            $data = [
+                'status' => 'ok',
+                'code' => 200,
+                'message' => null,
+                'data' => $product,
+            ];
+        }
+        else
+        {
+            $data = [
+                'status' => 'failed',
+                'code' => 401,
+                'message' => 'Product not found',
+                'data' => [],
+            ];
+        }
     }
 }

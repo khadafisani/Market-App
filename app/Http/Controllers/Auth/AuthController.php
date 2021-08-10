@@ -6,14 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Carbon\Carbon;
-use App\Http\Requests\AuthController\LoginRequest;
-use App\Http\Requests\AuthController\AddUserRequest;
-
-use App\Http\Controllers;
+use App\Http\Requests\AuthLogin;
+use App\Http\Requests\AuthAddUser;
 
 class AuthController extends Controller
 {
-    public function login(LoginRequest $request)
+    public function login(AuthLogin $request)
     {
         $valid = $request->validated();
 
@@ -45,7 +43,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function addUser(AddUserRequest $request)
+    public function addUser(AuthAddUser $request)
     {
         $valid = $request->validated();
 

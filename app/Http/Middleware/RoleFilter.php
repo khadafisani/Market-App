@@ -17,7 +17,11 @@ class RoleFilter
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        if(Auth::user()->role != $role)
+        if(Auth::user()->role == "admin")
+        {
+            //is Admin? go to $next
+        }
+        else if(Auth::user()->role != $role)
         {
             return response()->json(['message' => 'Unathorize!'], 401);
         }

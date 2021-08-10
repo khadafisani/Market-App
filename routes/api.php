@@ -35,10 +35,23 @@ Route::group(['prefix' => 'v1'], function() {
             Route::get('user/delete/{id}', [Auth\AuthController::class, 'deleteUser']);
         });
 
-        Route::post('product', [ProductController::class, 'store']);
-        Route::get('products', [ProductController::class, 'product']);
-        Route::get('product/{id}', [ProductController::class, 'destroy']);
-        Route::post('product/{id}', [ProductController::class, 'update']);
+        Route::group(['middleware' => 'user:gudang'], function()
+        {
+            Route::post('product', [ProductController::class, 'store']);
+            Route::get('products', [ProductController::class, 'product']);
+            Route::get('product/delete/{id}', [ProductController::class, 'destroy']);
+            Route::get('product/{id}', [ProductController::class, 'specific']);
+            Route::post('product/{id}', [ProductController::class, 'update']);
+        });
+
+        Route::group(['middleware' => 'user:kasir'], function()
+        {
+            Route::post('member', [MemberController::class, 'store']);
+            Route::post('member/update', [MemberController::class, 'update']);
+            Route::get('member/delete/{id}', [MemberController::class, 'delete']);
+            Route::get('members', [MemberController::class, 'members']);
+            Route::post('member/check', [MemberController::class, 'getMember']);
+        });
     });
 
 });
