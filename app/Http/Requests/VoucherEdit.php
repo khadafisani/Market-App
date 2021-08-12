@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductUpdate extends FormRequest
+class VoucherEdit extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,6 +25,9 @@ class ProductUpdate extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'point' => 'required|integer',
+            'discount' => 'required|numeric',
+            'max_amount' => 'required|integer',
         ];
     }
 }

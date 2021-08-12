@@ -37,11 +37,15 @@ Route::group(['prefix' => 'v1'], function() {
 
         Route::group(['middleware' => 'user:gudang'], function()
         {
+            Route::post('product/add/stock', [ProductInController::class, 'store']);
+            Route::get('product/delete/stock/{id}', [ProductInController::class, 'destroy']);
+
             Route::post('product', [ProductController::class, 'store']);
             Route::get('products', [ProductController::class, 'product']);
             Route::get('product/delete/{id}', [ProductController::class, 'destroy']);
             Route::get('product/{id}', [ProductController::class, 'specific']);
             Route::post('product/{id}', [ProductController::class, 'update']);
+
         });
 
         Route::group(['middleware' => 'user:kasir'], function()
@@ -51,6 +55,17 @@ Route::group(['prefix' => 'v1'], function() {
             Route::get('member/delete/{id}', [MemberController::class, 'delete']);
             Route::get('members', [MemberController::class, 'members']);
             Route::post('member/check', [MemberController::class, 'getMember']);
+
+            Route::post('voucher', [VoucherController::class, 'store']);
+            Route::get('vouchers', [VoucherController::class, 'vouchers']);
+            Route::post('voucher/update/{id}', [VoucherController::class, 'edit']);
+            Route::get('voucher/{id}', [VoucherController::class, 'destroy']);
+
+            Route::post('transaction', [TransactionController::class, 'store']);
+            Route::post('transaction/member', [TransactionController::class, 'isMember']);
+            Route::get('transaction/redeem/{id}', [TransactionController::class, 'redeemVoucher']);
+            Route::get('transaction', [TransactionController::class, 'getTransactionData']);
+            Route::post('transaction/payment', [TransactionController::class, 'doTransaction']);
         });
     });
 

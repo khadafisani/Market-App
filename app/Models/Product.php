@@ -14,4 +14,14 @@ class Product extends Model
         'stock',
         'price',
     ];
+
+    public function productIn()
+    {
+        return $this->hasMany(ProductIn::class);
+    }
+
+    public function productOut()
+    {
+        return $this->hasManyThrough(ProductOut::class, ProductIn::class, 'product_id', 'product_in_id', 'id', 'id');
+    }
 }

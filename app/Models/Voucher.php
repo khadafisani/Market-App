@@ -3,21 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Member extends Model
+class Voucher extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'id',
         'name',
-        'email',
+        'point',
+        'discount',
+        'max_amount',
     ];
-
-    public function Transaction()
-    {
-        return $this->hasMany(Transaction::class);
-    }
 }

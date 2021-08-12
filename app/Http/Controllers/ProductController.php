@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductIn;
 use App\Http\Requests\ProductUpdate;
 use App\Http\Requests\ProductStore;
 
@@ -12,13 +13,19 @@ class ProductController extends Controller
     {
         $valid = $request->validated();
 
-        $data = [
+        $productData = [
             'name'  => $request->name,
-            'stock' => $request->stock,
+        ];
+
+        $product = Product::create($productData);
+
+        $productInData = [
+            'product_id' => $product->id,
+            'stock_in' => $request->stock,
             'price' => $request->price,
         ];
 
-        Product::create($data);
+        ProductIn::create($productInData);
 
         return response()->json([
             'status' => 'ok',
@@ -28,10 +35,10 @@ class ProductController extends Controller
         ]);
     }
 
-
     public function product()
     {
-        $product = Product::all();
+        $product = Product::withSum('productIn as stock_in', 'stock_in')->withSum('productOut as stock_out', 'stock_out')->get();
+
         return response()->json([
             'status' => 'ok',
             'message' => null,
@@ -75,8 +82,6 @@ class ProductController extends Controller
         if($product)
         {
             $product->name  = $request->name;
-            $product->stock = $request->stock;
-            $product->price = $request->price;
 
             $product->save();
 
