@@ -50,6 +50,7 @@ class TransactionController extends Controller
                     $productOut = new ProductOut; //akan ada barang yang keluar
                     $productOut->transaction_id = $transactionId; //barang keluar pada transaksi ID
                     $productOut->product_in_id = $productIn->id; //menggunakan stock masuk ID
+                    $productOut->cost_history = $product[0]->selling_cost; //product ini dibeli dengan harga berapa?
 
                     $stock = $productIn->stock_in - $productIn->stock_out; //dapatkan stock
                     if($stock > $orderValue) //jika stock lebih banyak dari pesanan
@@ -68,7 +69,7 @@ class TransactionController extends Controller
                     }
                     $productOut->save();
 
-                    $transaction->total += $productOut->stock_out * $productIn->price; //total per item out
+                    $transaction->total += $productOut->stock_out * $product[0]->selling_cost; //total per item out
                     $transaction->save();
                 }
             }
