@@ -26,7 +26,7 @@ class ProductInStore extends FormRequest
         return [
             'product_id' => 'required|exists:products,id',
             'stock_in' => 'required',
-            'price' => 'required',
+            'purchase_cost' => 'required',
         ];
     }
 }

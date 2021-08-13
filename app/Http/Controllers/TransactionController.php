@@ -12,7 +12,6 @@ use App\Models\Product;
 use App\Models\ProductIn;
 use App\Models\ProductOut;
 use App\Models\Transaction;
-use App\Models\TransactionDetail;
 use App\Models\Member;
 use App\Models\Voucher;
 
@@ -49,7 +48,7 @@ class TransactionController extends Controller
                     $productIn = ProductIn::withSum('productOut as stock_out', 'stock_out')->where('product_id', $product_id)->get()->first(); //dapatkan stock barang yang paling awal
 
                     $productOut = new ProductOut; //akan ada barang yang keluar
-                    $productOut->transaction_id = $transactionId; //barang keluar pada traksasi ID
+                    $productOut->transaction_id = $transactionId; //barang keluar pada transaksi ID
                     $productOut->product_in_id = $productIn->id; //menggunakan stock masuk ID
 
                     $stock = $productIn->stock_in - $productIn->stock_out; //dapatkan stock

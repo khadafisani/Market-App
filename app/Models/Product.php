@@ -11,8 +11,7 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'stock',
-        'price',
+        'selling_cost',
     ];
 
     public function productIn()

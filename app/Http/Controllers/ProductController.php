@@ -15,6 +15,7 @@ class ProductController extends Controller
 
         $productData = [
             'name'  => $request->name,
+            'selling_cost' => $request->selling_cost,
         ];
 
         $product = Product::create($productData);
@@ -22,7 +23,7 @@ class ProductController extends Controller
         $productInData = [
             'product_id' => $product->id,
             'stock_in' => $request->stock,
-            'price' => $request->price,
+            'purchase_cost' => $request->purchase_cost,
         ];
 
         ProductIn::create($productInData);
@@ -82,6 +83,7 @@ class ProductController extends Controller
         if($product)
         {
             $product->name  = $request->name;
+            $product->selling_cost = $request->selling_cost;
 
             $product->save();
 

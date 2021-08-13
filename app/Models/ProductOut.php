@@ -15,6 +15,7 @@ class ProductOut extends Model
         'transaction_id',
         'product_in_id',
         'stock_out',
+        'cost_history',
     ];
 
     public function productIn()

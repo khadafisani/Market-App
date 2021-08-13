@@ -24,9 +24,10 @@ class ProductStore extends FormRequest
     public function rules()
     {
         return [
-            'name'      => 'required|string|unique:products',
-            'stock'     => 'required|integer',
-            'price'      => 'required|integer',
+            'name' => 'required|string|unique:products',
+            'selling_cost' => 'required|integer',
+            'stock' => 'required|integer',
+            'purchase_cost' => 'required|integer',
         ];
     }
 }

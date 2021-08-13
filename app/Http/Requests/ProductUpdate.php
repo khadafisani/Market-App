@@ -24,7 +24,8 @@ class ProductUpdate extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'name' => 'required|string|unique:products',
+            'selling_cost' => 'required|integer',
         ];
     }
 }
