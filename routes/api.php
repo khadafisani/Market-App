@@ -21,7 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1'], function() {
     Route::post('login', [Auth\AuthController::class, 'login']);
 
-
     Route::group(['middleware' => 'auth:api'], function(){
 
         Route::get('logout', [Auth\AuthController::class, 'logout']);
@@ -45,7 +44,6 @@ Route::group(['prefix' => 'v1'], function() {
             Route::get('product/delete/{id}', [ProductController::class, 'destroy']);
             Route::get('product/{id}', [ProductController::class, 'specific']);
             Route::post('product/{id}', [ProductController::class, 'update']);
-
         });
 
         Route::group(['middleware' => 'user:kasir'], function()
@@ -66,6 +64,9 @@ Route::group(['prefix' => 'v1'], function() {
             Route::get('transaction/redeem/{id}', [TransactionController::class, 'redeemVoucher']);
             Route::get('transaction', [TransactionController::class, 'getTransactionData']);
             Route::post('transaction/payment', [TransactionController::class, 'doTransaction']);
+
+            Route::post('report', [ReportController::class, 'byDate']);
+            Route::post('stock', [ReportController::class, 'stocks']);
         });
     });
 

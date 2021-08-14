@@ -31,10 +31,10 @@ class TransactionController extends Controller
 
         $transactionId = $transaction->id;
 
-        for($i=0; $i<count($items); $i++)
+        for($i=0; $i<count($items['data']); $i++)
         {
-            $product_id = $items['input'][$i]['id']; //barang yang dipesan
-            $orderValue = $items['input'][$i]['value']; //jumlah barang yang dipesan
+            $product_id = $items['data'][$i]['id']; //barang yang dipesan
+            $orderValue = $items['data'][$i]['value']; //jumlah barang yang dipesan
 
             //mendapatkan total stock per item saat ini
             $product = Product::withSum('productOut as stock_out', 'stock_out')->withSum('productIn as stock_in', 'stock_in')->where('id', $product_id)->get();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductIn;
+use App\Models\ProductOut;
 use App\Http\Requests\ProductUpdate;
 use App\Http\Requests\ProductStore;
 

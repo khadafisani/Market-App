@@ -23,4 +23,14 @@ class Product extends Model
     {
         return $this->hasManyThrough(ProductOut::class, ProductIn::class, 'product_id', 'product_in_id', 'id', 'id');
     }
+
+    public function productInWithTrashed()
+    {
+        return $this->hasMany(ProductIn::class)->withTrashed()->withSum('ProductOut', 'stock_out');
+    }
+
+    public function productOutWithTrashedParent()
+    {
+        return $this->hasManyThrough(ProductOut::class, ProductIn::class, 'product_id', 'product_in_id', 'id', 'id')->withTrashedParents();
+    }
 }

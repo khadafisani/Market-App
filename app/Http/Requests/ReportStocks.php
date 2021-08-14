@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TransactionStore extends FormRequest
+class ReportStocks extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class TransactionStore extends FormRequest
     public function rules()
     {
         return [
-            'data.*.id' => 'required|exists:products,id',
-            'data.*.value' => 'required',
+            'date' => 'required|date',
         ];
     }
 }
