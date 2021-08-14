@@ -44,6 +44,8 @@ Route::group(['prefix' => 'v1'], function() {
             Route::get('product/delete/{id}', [ProductController::class, 'destroy']);
             Route::get('product/{id}', [ProductController::class, 'specific']);
             Route::post('product/{id}', [ProductController::class, 'update']);
+
+            Route::get('notification', [NotificationController::class, 'sendLowStock']);
         });
 
         Route::group(['middleware' => 'user:kasir'], function()

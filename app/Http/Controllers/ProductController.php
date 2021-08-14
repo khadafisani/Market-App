@@ -7,6 +7,7 @@ use App\Models\ProductIn;
 use App\Models\ProductOut;
 use App\Http\Requests\ProductUpdate;
 use App\Http\Requests\ProductStore;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {

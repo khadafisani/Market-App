@@ -78,7 +78,7 @@ class TransactionController extends Controller
                 return response()->json([
                     'status' => 'failed',
                     'code' => 401,
-                    'message' => 'Stock '.$product->name. 'tidak mencukupi, tersisa'.$totalStock,
+                    'message' => 'Stock '.$product[0]->name. ' tidak mencukupi, tersisa '.$totalStock,
                 ]);
             }
         }
