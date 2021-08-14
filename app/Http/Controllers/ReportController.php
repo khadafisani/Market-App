@@ -13,8 +13,8 @@ class ReportController extends Controller
     public function byDate(ReportByDay $request)
     {
         $request->validated();
-        $report = ProductOut::getReport();
-        $category = strtolower($request->category);
+        $report = ProductOut::getReport(); //custom function
+        $category = strtolower($request->category); //convert category to lower case to prevent error
 
         if($category == "day")
         {
@@ -38,14 +38,14 @@ class ReportController extends Controller
 
         $income = 0;
         $outcome = 0;
-
+        //count income and outcome
         foreach($data as $result)
         {
             $income += $result->income;
             $outcome += $result->outcome;
         }
 
-        $dataProfit = [
+        $dataLaba = [
             'income' => $income,
             'outcome' => $outcome,
             'profit' => $income - $outcome
@@ -53,7 +53,7 @@ class ReportController extends Controller
 
         $res = [
             'data' => $data,
-            'laba' => $dataProfit
+            'laba' => $dataLaba
         ];
 
         return response()->json([
@@ -68,16 +68,17 @@ class ReportController extends Controller
     {
         $request->validated();
 
+        //set global variabel for custom withCount
         $this->month = date('m', strtotime($request->date));
         $this->year = date('Y', strtotime($request->date));
 
         $data = Product::withCount(['productOutWithTrashedParent as stock_out' => function($query){
-
+            //sum stock_out by Month and year
             $query->whereMonth('product_out.created_at', '=', $this->month)->whereYear('product_out.created_at', '=', $this->year)->select(DB::raw('sum(stock_out)'));
 
         }])
         ->withCount(['productInWithTrashed as stock_in' => function($query){
-
+            //sum stock_in by Month and year
             $query->whereMonth('product_in.created_at', '=', $this->month)->whereYear('product_in.created_at', '=', $this->year)->select(DB::raw('sum(stock_in)'));
 
         }])->get();
