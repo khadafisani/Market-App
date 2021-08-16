@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Notification;
-use App\Notifications\LowStock;
+use App\Notifications\LowStockNotification;
 use App\Models\User;
 use App\Models\Product;
 
